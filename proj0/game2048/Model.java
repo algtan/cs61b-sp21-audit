@@ -116,34 +116,25 @@ public class Model extends Observable {
             int mergeOrMoveLocation = board.size() - 1;
 
             for (int row = board.size() - 2; row >= 0; row--) {
-
                 Tile highestMergeableTile = board.tile(col, mergeOrMoveLocation);
                 Tile currentTile = board.tile(col, row);
+                int highestMergeableTileValue = highestMergeableTile != null ? highestMergeableTile.value() : 0;
+                int currentTileValue = currentTile != null ? currentTile.value() : 0;
 
-                if (currentTile == null) {
-                    continue;
-                }
-
-                if (highestMergeableTile == null) {
-                    board.move(col, mergeOrMoveLocation, currentTile);
-                    changed = true;
-                    continue;
-                }
-
-                if (highestMergeableTile.value() != currentTile.value()) {
+                if (highestMergeableTile != null && currentTile != null && highestMergeableTile.value() != currentTile.value()) {
                     mergeOrMoveLocation--;
-
-                    if (mergeOrMoveLocation > row) {
-                        board.move(col, mergeOrMoveLocation, currentTile);
-                        changed = true;
-                    }
                 }
 
-                if (highestMergeableTile.value() == currentTile.value()) {
-                    board.move(col, mergeOrMoveLocation, currentTile);
+                if (currentTile == null || row >= mergeOrMoveLocation) {
+                    continue;
+                }
+
+                board.move(col, mergeOrMoveLocation, currentTile);
+                changed = true;
+
+                if (highestMergeableTileValue == currentTileValue) {
                     score += board.tile(col, mergeOrMoveLocation).value();
                     mergeOrMoveLocation--;
-                    changed = true;
                 }
             }
         }
