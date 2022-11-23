@@ -26,4 +26,37 @@ public class TestBuggyAList {
         assertEquals(correct.removeLast(), buggy.removeLast());
         assertEquals(correct.removeLast(), buggy.removeLast());
     }
+
+    @Test
+    public void randomizedTest() {
+        AListNoResizing<Integer> correct = new AListNoResizing<>();
+        BuggyAList<Integer> buggy = new BuggyAList<>();
+
+        int N = 5000;
+        for (int i = 0; i < N; i += 1) {
+            int operationNumber = StdRandom.uniform(0, 4);
+            if (operationNumber == 0) {
+                // addLast
+                int randVal = StdRandom.uniform(0, 100);
+                correct.addLast(randVal);
+                buggy.addLast(randVal);
+            } else if (operationNumber == 1) {
+                // size
+                int size = correct.size();
+                assertEquals(size, buggy.size());
+            } else if (operationNumber == 2) {
+                // getLast
+                if (correct.size() == 0) continue;
+
+                int last = correct.getLast();
+                assertEquals(last, (int) buggy.getLast());
+            } else if (operationNumber == 3) {
+                // removeLast
+                if (correct.size() == 0) continue;
+
+                int prevLast = correct.removeLast();
+                assertEquals(prevLast, (int) buggy.removeLast());
+            }
+        }
+    }
 }
