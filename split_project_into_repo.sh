@@ -7,7 +7,7 @@ then
     NEWDIR="game2048"
 elif [ $SUBDIR = "proj1" ]
 then
-    NEWDIR="guitar-hero"
+    NEWDIR="deques"
 elif [ "$SUBDIR" = "proj2" ]
 then
     NEWDIR="gitlet"
