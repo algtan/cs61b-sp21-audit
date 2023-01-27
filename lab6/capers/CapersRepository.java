@@ -1,6 +1,8 @@
 package capers;
 
 import java.io.File;
+import java.io.IOException;
+
 import static capers.Utils.*;
 import static capers.Dog.*;
 
@@ -40,7 +42,20 @@ public class CapersRepository {
      * @param text String of the text to be appended to the story
      */
     public static void writeStory(String text) {
-        // TODO
+        File f = Utils.join(CAPERS_FOLDER, "story.txt");
+
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        String existingContent = readContentsAsString(f);
+        String story = existingContent + text + "\n";
+        Utils.writeContents(f, story);
+        System.out.print(story);
     }
 
     /**
