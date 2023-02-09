@@ -34,6 +34,28 @@ public class BSTMap<K extends Comparable<K>, V>  implements Map61B<K, V> {
             return null;
         }
 
+        void put(K k, V v, BSTNode next) {
+            if (next.key.compareTo(k) == 0) {
+                next.val = v;
+            }
+            if (k.compareTo(next.key) < 0) {
+                if (next.left != null) {
+                    put(k, v, next.left);
+                } else {
+                    next.left = new BSTNode(k, v, null, null);
+                    size = size + 1;
+                }
+            }
+            if (k.compareTo(next.key) > 0) {
+                if (next.right != null) {
+                    put(k, v, next.right);
+                } else {
+                    next.right = new BSTNode(k, v, null, null);
+                    size = size + 1;
+                }
+            }
+        }
+
         /** Stores the key of the key-value pair of this node in the tree. */
         K key;
         /** Stores the value of the key-value pair of this node in the tree. */
@@ -48,13 +70,17 @@ public class BSTMap<K extends Comparable<K>, V>  implements Map61B<K, V> {
     /** Removes all of the mappings from this map. */
     @Override
     public void clear() {
-        throw new UnsupportedOperationException();
+        size = 0;
+        tree = null;
     }
 
     /* Returns true if this map contains a mapping for the specified key. */
     @Override
     public boolean containsKey(K key) {
-        throw new UnsupportedOperationException();
+        if (tree == null) {
+            return false;
+        }
+        return tree.get(key) != null;
     }
 
     /* Returns the value to which the specified key is mapped, or null if this
@@ -62,19 +88,36 @@ public class BSTMap<K extends Comparable<K>, V>  implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        if (tree == null) {
+            return null;
+        }
+        BSTNode lookup = tree.get(key);
+        if (lookup == null) {
+            return null;
+        }
+        return lookup.val;
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
     }
 
     /* Associates the specified value with the specified key in this map. */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (tree != null) {
+            BSTNode lookup = tree.get(key);
+            if (lookup == null) {
+                tree.put(key, value, tree);
+            } else {
+                lookup.val = value;
+            }
+        } else {
+            tree = new BSTNode(key, value, null, null);
+            size = size + 1;
+        }
     }
 
     /* Returns a Set view of the keys contained in this map. Not required for Lab 7.
