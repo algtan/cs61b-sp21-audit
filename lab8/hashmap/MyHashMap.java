@@ -1,8 +1,6 @@
 package hashmap;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  *  A hash table-backed Map implementation. Provides amortized constant time
@@ -29,12 +27,18 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /* Instance Variables */
     private Collection<Node>[] buckets;
-    // You should probably define some more!
+    private double maxLoad;
+    private int size;
+    private HashSet<K> hashSet;
 
     /** Constructors */
-    public MyHashMap() { }
+    public MyHashMap() {
+        this(16);
+    }
 
-    public MyHashMap(int initialSize) { }
+    public MyHashMap(int initialSize) {
+        this(initialSize, 0.75);
+    }
 
     /**
      * MyHashMap constructor that creates a backing array of initialSize.
@@ -43,13 +47,22 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param initialSize initial size of backing array
      * @param maxLoad maximum load factor
      */
-    public MyHashMap(int initialSize, double maxLoad) { }
+    public MyHashMap(int initialSize, double maxLoad) {
+        this.reset(initialSize);
+        this.maxLoad = maxLoad;
+    }
+
+    public void reset(int initialSize) {
+        this.buckets = createTable(initialSize);
+        this.size = 0;
+        this.hashSet = new HashSet<>();
+    }
 
     /**
      * Returns a new node to be placed in a hash table bucket
      */
     private Node createNode(K key, V value) {
-        return null;
+        return new Node(key, value);
     }
 
     /**
@@ -71,7 +84,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * OWN BUCKET DATA STRUCTURES WITH THE NEW OPERATOR!
      */
     protected Collection<Node> createBucket() {
-        return null;
+        return new LinkedList<>();
     }
 
     /**
@@ -84,7 +97,12 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param tableSize the size of the table to create
      */
     private Collection<Node>[] createTable(int tableSize) {
-        return null;
+        var table = new Collection[tableSize];
+        for (int i = 0; i < tableSize; i++) {
+            table[i] = createBucket();
+        }
+
+        return table;
     }
 
     // TODO: Implement the methods of the Map61B Interface below
