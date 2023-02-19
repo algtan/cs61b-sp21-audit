@@ -52,7 +52,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         this.maxLoad = maxLoad;
     }
 
-    public void reset(int initialSize) {
+    private void reset(int initialSize) {
         this.buckets = createTable(initialSize);
         this.size = 0;
         this.hashSet = new HashSet<>();
