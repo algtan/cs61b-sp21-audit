@@ -105,18 +105,22 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         return table;
     }
 
-    // TODO: Implement the methods of the Map61B Interface below
-    // Your code won't compile until you do so!
+    private int getBucket(K key) {
+        var hashCode = key.hashCode();
+        var tableSize = buckets.length;
+        return hashCode > 0 ? hashCode % tableSize : Math.floorMod(hashCode, tableSize);
+    }
+
     /** Removes all of the mappings from this map. */
     @Override
     public void clear() {
-        throw new UnsupportedOperationException();
+        this.reset(16);
     }
 
     /** Returns true if this map contains a mapping for the specified key. */
     @Override
     public boolean containsKey(K key) {
-        throw new UnsupportedOperationException();
+        return hashSet.contains(key);
     }
 
     /**
@@ -125,13 +129,20 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        var bucket = getBucket(key);
+        for (Node node : buckets[bucket]) {
+            if (node.key.equals(key)) {
+                return node.value;
+            }
+        }
+
+        return null;
     }
 
     /** Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return this.size;
     }
 
     /**
@@ -141,13 +152,24 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        var bucket = getBucket(key);
+        for (Node node : buckets[bucket]) {
+            if (node.key.equals(key)) {
+                node.value = value;
+                return;
+            }
+        }
+
+        var node = new Node(key, value);
+        buckets[bucket].add(node);
+        this.size++;
+        this.hashSet.add(key);
     }
 
     /** Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        return hashSet;
     }
 
     /**
@@ -172,6 +194,6 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return hashSet.iterator();
     }
 }
